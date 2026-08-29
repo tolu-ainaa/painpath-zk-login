@@ -76,10 +76,27 @@ Then:
 
 - Point it at the local proof server: **Settings → Midnight →
   `Local (http://localhost:6300)`**
-- Get funds from the preprod faucet: <https://faucet.preprod.midnight.network/>
-  Paste your address, request tokens, wait a few minutes, then **Generate
-  tDUST** and confirm the transaction. tDUST has no value; it only exists to
-  pay for testnet transactions.
+- Get funds from the faucet **for the network the wallet is actually on** —
+  preprod: <https://faucet.preprod.midnight.network/>,
+  preview: <https://faucet.preview.midnight.network/>.
+  Request tokens, wait a few minutes, then **Generate tDUST** and confirm the
+  transaction. The faucet sends tNIGHT to the unshielded address; *Generate
+  tDUST* delegates it into the tDUST that actually pays for transactions.
+  tDUST has no value outside the testnet.
+
+> **The faucet address gotcha.** Lace holds three addresses and the faucet
+> accepts exactly one. Its default view is Cardano — you need the separate
+> **Midnight tab → Receive → Unshielded address**.
+>
+> | Address | Prefix | Faucet |
+> |---|---|---|
+> | Cardano | `addr_test1…` | rejected |
+> | Midnight shielded | `mn_shield-addr_preprod1…` | `InvalidAddressError` |
+> | Midnight unshielded | `mn_addr_preprod1…` | accepted |
+>
+> Set the wallet's network **before** copying the address — the prefix encodes
+> the network (`_preprod`, `_preview`, `_undeployed`), and an address from the
+> wrong one is rejected even though the same seed generated it.
 
 ## Step 5 — bboard tutorial (inside WSL)
 
