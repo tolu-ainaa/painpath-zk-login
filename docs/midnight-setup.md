@@ -127,16 +127,76 @@ The server listens on `http://localhost:6300`. It **must** stay up for the
 whole of Phases 3 and 4 — every proof is generated through it. The single most
 common way to lose a day here is starting work with Docker not running.
 
-## Step 7 — The gate
+## Step 7 — The gate ✅ CLEARED
+
+`bboard-cli` has a **`standalone`** script that the tutorial page does not
+mention. It is the fastest way through the gate:
 
 ```bash
 cd example-bboard/bboard-cli
-npm run preprod-remote
+npm run standalone
 ```
 
-Deploy a board, post a message, take it down. **Do not start Phase 3 until this
-round trip completes.** If you are stuck past three hours, ask in the Midnight
-Discord `#mlh-hackers` channel rather than grinding alone.
+It uses testcontainers to bring up the whole stack from `compose.yml` —
+`midnight-node:0.22.3`, `indexer-standalone:4.0.1`, `proof-server:8.0.3` — on
+ephemeral ports. Crucially, `StandaloneConfig` sets `generateDust = false` and
+`buildWallet` short-circuits to `GENESIS_MINT_WALLET_SEED`, so **it needs no
+Lace wallet and no testnet funds.** The dev-preset node funds the genesis
+wallet itself (NIGHT 250000000000000, Dust 1.25e24).
+
+Verified round trip on this machine:
+
+| | after `post` | after `takeDown` |
+|---|---|---|
+| `state` | `occupied` | `vacant` |
+| `message` | `PainPath ZK login smoke test` | `none` |
+| `sequence` | 1 | **2** — the replay guard |
+| `owner` | `f8940f30ce351c21d9d06ca5cf6b20625e008776f52ea342dc1631ee0607261d` | unchanged |
+
+The only thing derived from the secret that ever reaches the ledger is that
+32-byte commitment.
+
+Testnet deployment (`npm run preprod-remote`) still needs Lace and tDUST, but
+that is a Phase 3 concern — it does not block the gate.
+
+> **Driving the CLI non-interactively.** It uses `readline`, so piping all the
+> answers at once (`printf '1\n1\n…' | npm run standalone`) fails with
+> `readline was closed` — stdin hits EOF during the ~30s wallet sync, before
+> the first prompt. Feed it through a FIFO and hold the write end open, pacing
+> the answers around proof generation (deploy ~20s, post and takeDown ~2–3 min
+> each).
+
+---
+
+## Windows gotchas actually hit on this machine
+
+None of these are in the official docs.
+
+1. **`wsl --install --no-launch` skips first-run user creation.** Launch the
+   distro once so the UNIX account exists, or WSL falls back to root with
+   `HOME` set to a mangled Windows path — which breaks nvm and the Compact
+   installer, both of which install into `$HOME`.
+2. **Docker Desktop's `docker` group takes gid 1000 first**, so the user
+   account lands on uid 1001 while WSL's default-user pointer still says 1000
+   → `getpwuid(1000) failed`.
+3. **`wsl --terminate` tears down `/mnt/wsl/docker-desktop`**, the cross-distro
+   mount Docker Desktop builds when *it* starts the distro. `docker` in WSL
+   then fails as "command not found" from a dangling symlink. Restarting Docker
+   Desktop rebuilds it — give it several minutes, it is slower than it looks.
+4. **The daemon socket is not linked automatically.** If `/var/run/docker.sock`
+   is missing, link it and fix the mode — it is created `755`, and sockets need
+   *write* to connect:
+   ```bash
+   sudo ln -sf /mnt/wsl/docker-desktop/shared-sockets/guest-services/docker.proxy.sock /var/run/docker.sock
+   sudo chown root:docker /var/run/docker.sock && sudo chmod 660 /var/run/docker.sock
+   ```
+   This is a stopgap — it does not survive a Docker Desktop restart. The
+   durable fix is **Settings → Resources → WSL Integration → enable Ubuntu**.
+5. **The Ubuntu image ships without `unzip`.** The Compact installer fails with
+   "Failed to spawn artifact extraction command", then leaves a version
+   directory containing only an unextracted `artifact.zip` — after which
+   `compact update` reports "already installed" while `compactc` does not
+   exist. Fix: `apt install unzip`, `rm -rf ~/.compact/versions/0.31.0`, retry.
 
 ---
 
