@@ -1,0 +1,54 @@
+{
+  "sessionId": "a3f9b2c1-4d8e-4f1a-9b2c-1d4e8f1a9b2c",
+  "patientId": "patient_001",
+  "submittedAt": "2026-04-19T14:32:00.000Z",
+  "deviceType": "MetaQuest3",
+  "painZones": [
+    {
+      "zoneId": "zone_001",
+      "uvX": 0.48,
+      "uvY": 0.62,
+      "worldPosition": {
+        "x": 0.02,
+        "y": 0.85,
+        "z": 0.12
+      },
+      "painType": "sharp",
+      "intensity": 8,
+      "timestamp": "2026-04-19T14:30:12.000Z"
+    },
+    {
+      "zoneId": "zone_002",
+      "uvX": 0.21,
+      "uvY": 0.38,
+      "worldPosition": {
+        "x": -0.18,
+        "y": 1.32,
+        "z": 0.08
+      },
+      "painType": "ache",
+      "intensity": 5,
+      "timestamp": "2026-04-19T14:30:45.000Z"
+    },
+    {
+      "zoneId": "zone_003",
+      "uvX": 0.63,
+      "uvY": 0.21,
+      "worldPosition": {
+        "x": 0.14,
+        "y": 0.42,
+        "z": 0.06
+      },
+      "painType": "stiff",
+      "intensity": 3,
+      "timestamp": "2026-04-19T14:31:20.000Z"
+    }
+  ],
+  "sessionSummary": {
+    "totalZones": 3,
+    "dominantPainType": "sharp",
+    "maxIntensity": 8,
+    "averageIntensity": 5.3,
+    "durationSeconds": 108
+  }
+}
