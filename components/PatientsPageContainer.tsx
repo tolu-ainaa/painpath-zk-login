@@ -10,7 +10,7 @@ const PAIN_COLORS = { sharp: "#E24B4A", ache: "#EF9F27", stiff: "#378ADD" };
 const TABS = ["Pending review", "Approved", "All patients"];
 const PAGE_SIZE = 8; // patients per page
 
-function timeAgo(isoString: number) {
+function timeAgo(isoString: string) {
   const diff = Date.now() - new Date(isoString).getTime();
   const mins = Math.floor(diff / 60000);
   const hrs  = Math.floor(diff / 3600000);
@@ -102,7 +102,7 @@ function PatientsCard({ patient }: { patient: Session }) {
 
       {/* Footer */}
       <div className="flex items-center justify-between">
-        <span className="text-[11px] text-[#B4B2A9]">Submitted {timeAgo(patient.submittedAt._seconds * 1000)}</span>
+        <span className="text-[11px] text-[#B4B2A9]">Submitted {timeAgo(patient.submittedAt)}</span>
         {isPending && (
           <span className="text-[11px] font-medium text-[#0F6E56] flex items-center gap-1">
             Review session →
@@ -132,17 +132,8 @@ const PatientsPageContainer = ({ sessions }: { sessions: Session[] }) => {
 
   // 1. Sort all sessions newest first — once, before any filtering
 const sorted = useMemo(() => {
-  return [...sessions].sort((a, b) => {
-    const getTime = (submittedAt: any) => {
-      // Firestore Timestamp object: { _seconds, _nanoseconds }
-      if (submittedAt?._seconds) return submittedAt._seconds;
-      // Fallback: ISO string
-      if (typeof submittedAt === "string") return new Date(submittedAt).getTime() / 1000;
-      return 0;
-    };
-
-    return getTime(b.submittedAt) - getTime(a.submittedAt);
-  });
+  const getTime = (submittedAt: string) => new Date(submittedAt).getTime() || 0;
+  return [...sessions].sort((a, b) => getTime(b.submittedAt) - getTime(a.submittedAt));
 }, [sessions]);
   
 

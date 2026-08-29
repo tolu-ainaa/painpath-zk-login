@@ -51,7 +51,7 @@ const PatientCard = ({ data }:{ data: Session }) => {
   regionDetails={data.processed.painSummary.regionDetails ?? []}
 />
           <hr className="border-none border-t border-black/10 my-3" />
-          <div className="text-[11px] text-[#B4B2A9]">Submitted: {submittedAt._seconds ? new Date(submittedAt._seconds * 1000).toLocaleString() : 'N/A'}</div>
+          <div className="text-[11px] text-[#B4B2A9]">Submitted: {submittedAt ? new Date(submittedAt).toLocaleString() : 'N/A'}</div>
           {/* <div className="text-[11px] text-[#B4B2A9]">Submitted: 19 Apr 2026 · 14:32 UTC</div> */}
         </div>
   )

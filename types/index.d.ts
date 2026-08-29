@@ -24,7 +24,7 @@ export type ProcessedRegion = {
   svgY: number;
 };
 export type PainSummary = {
-  regions: ProcessedZone[];
+  regions: Pick<ProcessedRegion, "label" | "painType" | "intensity">[];
   summary: {
     dominantPainType: string;
     maxIntensity: number;
@@ -58,18 +58,18 @@ export type Plan = {
   final: Exercise[] | null;
   edited: boolean;
   approvedBy: string | null;
-  approvedAt: any | null; // Firestore Timestamp
+  approvedAt: string | null; // ISO 8601
 };
 export type Audit = {
-  createdAt: any;   // Firestore Timestamp
-  updatedAt: any;   // Firestore Timestamp
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
 };
 export type Session = {
   sessionId: string;
   patientId: string;
   deviceType: string;
 
-  submittedAt: any; // Firestore Timestamp
+  submittedAt: string; // ISO 8601
 
   status: "pending_review" | "approved";
 
@@ -90,7 +90,6 @@ export type Session = {
   audit: Audit;
 };
 
-// types/index.ts — add this
 export type RegionDetail = {
   bodyPart: string;
   markerCount: number;

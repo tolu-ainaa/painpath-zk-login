@@ -1,34 +1,22 @@
-
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/firebaseAdmin"; // your existing firebase-admin instance
+import { SESSION_COOKIE, SESSION_MAX_AGE_SECONDS } from "@/lib/auth/session";
 
-export async function POST(req: Request) {
-  try {
-    const { idToken } = await req.json();
+// PLACEHOLDER — see lib/auth/session.ts.
+//
+// This route previously verified a Firebase ID token and exchanged it for a
+// Firebase session cookie. It now opens a session unconditionally, because the
+// real check is being rebuilt as a zero-knowledge proof against the Midnight
+// contract in Phase 4. Nothing here authenticates anybody.
+export async function POST() {
+  const response = NextResponse.json({ success: true });
 
-    if (!idToken) {
-      return NextResponse.json({ error: "Missing ID token" }, { status: 400 });
-    }
+  response.cookies.set(SESSION_COOKIE, "placeholder-pending-zk-login", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: SESSION_MAX_AGE_SECONDS,
+    path: "/",
+  });
 
-    // Verify the token is genuinely from Firebase Auth
-    await auth.verifyIdToken(idToken);
-
-    // Create a secure session cookie — valid for 5 days
-    const expiresIn = 5 * 24 * 60 * 60 * 1000;
-    const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
-
-    const response = NextResponse.json({ success: true });
-    response.cookies.set("session", sessionCookie, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: expiresIn / 1000,
-      path: "/",
-    });
-
-    return response;
-  } catch (error) {
-    console.error("Login error:", error);
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-  }
+  return response;
 }

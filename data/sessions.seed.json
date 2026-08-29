@@ -1,0 +1,192 @@
+[
+  {
+    "sessionId": "a3f9b2c1-4d8e-4f1a-9b2c-1d4e8f1a9b2c",
+    "patientId": "patient_001",
+    "deviceType": "MetaQuest3",
+    "submittedAt": "2026-08-27T14:32:00.000Z",
+    "status": "pending_review",
+    "sessionSummary": {
+      "totalZones": 3,
+      "dominantPainType": "sharp",
+      "maxIntensity": 8,
+      "averageIntensity": 5.3,
+      "durationSeconds": 108
+    },
+    "painZones": [
+      { "zoneId": "zone_001", "bodyPart": "lower_back", "uvX": 0.48, "uvY": 0.62, "worldPosition": { "x": 0.02, "y": 0.85, "z": 0.12 }, "painType": "sharp", "intensity": 8, "timestamp": "2026-08-27T14:30:12.000Z" },
+      { "zoneId": "zone_002", "bodyPart": "left_hip", "uvX": 0.21, "uvY": 0.38, "worldPosition": { "x": -0.18, "y": 1.32, "z": 0.08 }, "painType": "ache", "intensity": 5, "timestamp": "2026-08-27T14:30:45.000Z" },
+      { "zoneId": "zone_003", "bodyPart": "right_thigh", "uvX": 0.63, "uvY": 0.21, "worldPosition": { "x": 0.14, "y": 0.42, "z": 0.06 }, "painType": "stiff", "intensity": 3, "timestamp": "2026-08-27T14:31:20.000Z" }
+    ],
+    "regionDetails": [
+      { "bodyPart": "lower_back", "markerCount": 1, "pattern": "shooting", "duration": "3_to_6_months", "triggers": ["bending", "prolonged_sitting"] },
+      { "bodyPart": "left_hip", "markerCount": 1, "pattern": "dull_constant", "duration": "1_to_3_months", "triggers": ["stairs"] },
+      { "bodyPart": "right_thigh", "markerCount": 1, "pattern": "morning_stiffness", "duration": "under_1_month", "triggers": [] }
+    ],
+    "aiAnalysis": {
+      "conditionMatch": "Lumbar radiculopathy (L4/L5)",
+      "confidence": 78,
+      "reasoning": "Sharp shooting lower back pain radiating into the left hip and right thigh, aggravated by bending and prolonged sitting, is consistent with nerve root irritation at the lumbar level.",
+      "exercisePlan": [
+        { "name": "Sciatic nerve glide", "targetRegion": "Lower back", "description": "Sit upright, slowly straighten one knee then flex the ankle, and lower again. Stop before pain.", "sets": 3, "reps": 10, "frequency": "Twice daily" },
+        { "name": "Pelvic tilt", "targetRegion": "Lower back", "description": "Lie on your back with knees bent. Flatten the lower back into the floor for 5 seconds, then relax.", "sets": 3, "reps": 12, "frequency": "Daily" },
+        { "name": "Hip flexor stretch", "targetRegion": "Left hip", "description": "Half-kneel, tuck the pelvis under, and lean gently forward until a stretch is felt at the front of the hip.", "sets": 2, "reps": 3, "frequency": "Daily" },
+        { "name": "Standing hamstring stretch", "targetRegion": "Right thigh", "description": "Place the heel on a low step, keep the back straight and hinge forward from the hips.", "sets": 2, "reps": 3, "frequency": "Daily" }
+      ],
+      "redFlags": ["Loss of bladder or bowel control", "Progressive leg weakness", "Saddle anaesthesia"],
+      "referralRecommended": false
+    }
+  },
+  {
+    "sessionId": "b71c04ad-2e55-4d0a-8f31-6ac9e2b5d740",
+    "patientId": "patient_002",
+    "deviceType": "MetaQuest3",
+    "submittedAt": "2026-08-28T09:11:00.000Z",
+    "status": "pending_review",
+    "sessionSummary": {
+      "totalZones": 2,
+      "dominantPainType": "ache",
+      "maxIntensity": 7,
+      "averageIntensity": 6.0,
+      "durationSeconds": 74
+    },
+    "painZones": [
+      { "zoneId": "zone_101", "bodyPart": "right_shoulder", "uvX": 0.72, "uvY": 0.74, "worldPosition": { "x": 0.21, "y": 1.42, "z": 0.03 }, "painType": "ache", "intensity": 7, "timestamp": "2026-08-28T09:09:40.000Z" },
+      { "zoneId": "zone_102", "bodyPart": "neck", "uvX": 0.5, "uvY": 0.86, "worldPosition": { "x": 0.0, "y": 1.55, "z": 0.02 }, "painType": "stiff", "intensity": 5, "timestamp": "2026-08-28T09:10:15.000Z" }
+    ],
+    "regionDetails": [
+      { "bodyPart": "right_shoulder", "markerCount": 1, "pattern": "dull_constant", "duration": "over_6_months", "triggers": ["overhead_reaching", "sleeping_on_side"] },
+      { "bodyPart": "neck", "markerCount": 1, "pattern": "morning_stiffness", "duration": "3_to_6_months", "triggers": ["desk_work"] }
+    ],
+    "aiAnalysis": {
+      "conditionMatch": "Subacromial impingement, right shoulder",
+      "confidence": 71,
+      "reasoning": "Chronic dull shoulder ache provoked by overhead reaching and side-lying, with associated cervical stiffness, suggests subacromial impingement with a postural contribution.",
+      "exercisePlan": [
+        { "name": "Scapular retraction", "targetRegion": "Right shoulder", "description": "Sit tall and draw the shoulder blades down and back. Hold 5 seconds.", "sets": 3, "reps": 10, "frequency": "Twice daily" },
+        { "name": "Pendulum swing", "targetRegion": "Right shoulder", "description": "Lean forward, let the arm hang and swing in small circles.", "sets": 2, "reps": 20, "frequency": "Daily" },
+        { "name": "Chin tuck", "targetRegion": "Neck", "description": "Draw the chin gently backwards, lengthening the back of the neck. Hold 5 seconds.", "sets": 3, "reps": 10, "frequency": "Twice daily" }
+      ],
+      "redFlags": ["Night pain unrelieved by position change"],
+      "referralRecommended": false
+    }
+  },
+  {
+    "sessionId": "c92d5f38-77b1-4c6e-a0d9-3f5e18c7b264",
+    "patientId": "patient_003",
+    "deviceType": "MetaQuest3",
+    "submittedAt": "2026-08-26T16:48:00.000Z",
+    "status": "approved",
+    "sessionSummary": {
+      "totalZones": 2,
+      "dominantPainType": "sharp",
+      "maxIntensity": 9,
+      "averageIntensity": 7.0,
+      "durationSeconds": 132
+    },
+    "painZones": [
+      { "zoneId": "zone_201", "bodyPart": "right_knee", "uvX": 0.58, "uvY": 0.18, "worldPosition": { "x": 0.11, "y": 0.48, "z": 0.05 }, "painType": "sharp", "intensity": 9, "timestamp": "2026-08-26T16:45:02.000Z" },
+      { "zoneId": "zone_202", "bodyPart": "right_calf", "uvX": 0.58, "uvY": 0.1, "worldPosition": { "x": 0.1, "y": 0.28, "z": 0.04 }, "painType": "ache", "intensity": 5, "timestamp": "2026-08-26T16:46:30.000Z" }
+    ],
+    "regionDetails": [
+      { "bodyPart": "right_knee", "markerCount": 1, "pattern": "sharp_on_movement", "duration": "1_to_3_months", "triggers": ["descending_stairs", "squatting"] },
+      { "bodyPart": "right_calf", "markerCount": 1, "pattern": "dull_constant", "duration": "1_to_3_months", "triggers": ["walking"] }
+    ],
+    "aiAnalysis": {
+      "conditionMatch": "Patellofemoral pain syndrome, right knee",
+      "confidence": 83,
+      "reasoning": "Sharp anterior knee pain on stair descent and squatting with a secondary calf ache is a classic patellofemoral loading pattern.",
+      "exercisePlan": [
+        { "name": "Straight leg raise", "targetRegion": "Right knee", "description": "Lie flat, lock the knee and lift the leg 30cm. Lower slowly.", "sets": 3, "reps": 12, "frequency": "Daily" },
+        { "name": "Wall sit", "targetRegion": "Right knee", "description": "Back against a wall, knees bent to 45 degrees. Hold as tolerated.", "sets": 3, "reps": "20s hold", "frequency": "Daily" },
+        { "name": "Calf raise", "targetRegion": "Right calf", "description": "Rise onto the toes and lower under control.", "sets": 3, "reps": 15, "frequency": "Daily" }
+      ],
+      "redFlags": ["Knee locking or giving way"],
+      "referralRecommended": false
+    },
+    "plan": {
+      "edited": true,
+      "approvedBy": "physio_001",
+      "approvedAt": "2026-08-27T08:20:00.000Z",
+      "final": [
+        { "name": "Straight leg raise", "targetRegion": "Right knee", "description": "Lie flat, lock the knee and lift the leg 30cm. Lower slowly.", "sets": 3, "reps": 12, "frequency": "Daily" },
+        { "name": "Wall sit", "targetRegion": "Right knee", "description": "Back against a wall, knees bent to 45 degrees. Build up gradually.", "sets": 2, "reps": "15s hold", "frequency": "Daily" },
+        { "name": "Calf raise", "targetRegion": "Right calf", "description": "Rise onto the toes and lower under control. Use a rail for balance.", "sets": 3, "reps": 15, "frequency": "Daily" }
+      ]
+    }
+  },
+  {
+    "sessionId": "d5a83e12-9b64-42f7-bb08-51c7de904a3f",
+    "patientId": "patient_004",
+    "deviceType": "MetaQuest3",
+    "submittedAt": "2026-08-28T18:05:00.000Z",
+    "status": "pending_review",
+    "sessionSummary": {
+      "totalZones": 3,
+      "dominantPainType": "stiff",
+      "maxIntensity": 6,
+      "averageIntensity": 4.7,
+      "durationSeconds": 96
+    },
+    "painZones": [
+      { "zoneId": "zone_301", "bodyPart": "mid_back", "uvX": 0.5, "uvY": 0.58, "worldPosition": { "x": 0.0, "y": 1.05, "z": -0.1 }, "painType": "stiff", "intensity": 6, "timestamp": "2026-08-28T18:03:11.000Z" },
+      { "zoneId": "zone_302", "bodyPart": "left_shoulder", "uvX": 0.26, "uvY": 0.75, "worldPosition": { "x": -0.2, "y": 1.43, "z": 0.02 }, "painType": "ache", "intensity": 5, "timestamp": "2026-08-28T18:03:52.000Z" },
+      { "zoneId": "zone_303", "bodyPart": "left_forearm", "uvX": 0.14, "uvY": 0.5, "worldPosition": { "x": -0.3, "y": 1.0, "z": 0.05 }, "painType": "ache", "intensity": 3, "timestamp": "2026-08-28T18:04:30.000Z" }
+    ],
+    "regionDetails": [
+      { "bodyPart": "mid_back", "markerCount": 1, "pattern": "morning_stiffness", "duration": "over_6_months", "triggers": ["desk_work", "driving"] },
+      { "bodyPart": "left_shoulder", "markerCount": 1, "pattern": "dull_constant", "duration": "3_to_6_months", "triggers": ["typing"] },
+      { "bodyPart": "left_forearm", "markerCount": 1, "pattern": "intermittent", "duration": "under_1_month", "triggers": ["mouse_use"] }
+    ],
+    "aiAnalysis": {
+      "conditionMatch": "Postural thoracic dysfunction with upper limb referral",
+      "confidence": 64,
+      "reasoning": "Long-standing thoracic stiffness with desk-related aggravation and a distal ache down the left arm points to postural loading rather than a primary shoulder lesion.",
+      "exercisePlan": [
+        { "name": "Thoracic extension over chair", "targetRegion": "Mid back", "description": "Sit with hands behind the head and extend gently over the chair back.", "sets": 3, "reps": 8, "frequency": "Twice daily" },
+        { "name": "Open book rotation", "targetRegion": "Mid back", "description": "Side-lying with knees bent, rotate the top arm open and follow it with the eyes.", "sets": 2, "reps": 10, "frequency": "Daily" },
+        { "name": "Wrist extensor stretch", "targetRegion": "Left forearm", "description": "Straighten the elbow and gently draw the fingers downward. Hold 20 seconds.", "sets": 2, "reps": 3, "frequency": "Twice daily" }
+      ],
+      "redFlags": [],
+      "referralRecommended": false
+    }
+  },
+  {
+    "sessionId": "e0417c6b-3d29-4a85-97ce-b28f5c1d6e07",
+    "patientId": "patient_005",
+    "deviceType": "MetaQuest3",
+    "submittedAt": "2026-08-25T11:27:00.000Z",
+    "status": "approved",
+    "sessionSummary": {
+      "totalZones": 2,
+      "dominantPainType": "sharp",
+      "maxIntensity": 10,
+      "averageIntensity": 8.0,
+      "durationSeconds": 151
+    },
+    "painZones": [
+      { "zoneId": "zone_401", "bodyPart": "lower_back", "uvX": 0.5, "uvY": 0.6, "worldPosition": { "x": 0.0, "y": 0.92, "z": -0.09 }, "painType": "sharp", "intensity": 10, "timestamp": "2026-08-25T11:24:18.000Z" },
+      { "zoneId": "zone_402", "bodyPart": "left_thigh", "uvX": 0.36, "uvY": 0.28, "worldPosition": { "x": -0.12, "y": 0.62, "z": 0.03 }, "painType": "sharp", "intensity": 6, "timestamp": "2026-08-25T11:25:40.000Z" }
+    ],
+    "regionDetails": [
+      { "bodyPart": "lower_back", "markerCount": 1, "pattern": "shooting", "duration": "under_1_month", "triggers": ["lifting", "coughing"] },
+      { "bodyPart": "left_thigh", "markerCount": 1, "pattern": "shooting", "duration": "under_1_month", "triggers": ["lifting"] }
+    ],
+    "aiAnalysis": {
+      "conditionMatch": "Acute lumbar disc irritation",
+      "confidence": 87,
+      "reasoning": "Severe recent-onset shooting lumbar pain referring into the thigh and provoked by lifting and coughing is consistent with acute discogenic irritation.",
+      "exercisePlan": [
+        { "name": "Prone lying", "targetRegion": "Lower back", "description": "Lie face down on a firm surface for 2 minutes, propping on the elbows if comfortable.", "sets": 3, "reps": "2 min", "frequency": "Three times daily" },
+        { "name": "Prone press-up", "targetRegion": "Lower back", "description": "From prone, press the chest up while keeping the hips down. Stop before pain.", "sets": 3, "reps": 8, "frequency": "Twice daily" },
+        { "name": "Walking programme", "targetRegion": "Lower back", "description": "Short, frequent flat walks. Build from 5 to 15 minutes.", "sets": 1, "reps": "5-15 min", "frequency": "Three times daily" }
+      ],
+      "redFlags": ["Bilateral leg symptoms", "Bladder or bowel changes", "Unrelenting night pain"],
+      "referralRecommended": true
+    },
+    "plan": {
+      "edited": false,
+      "approvedBy": "physio_001",
+      "approvedAt": "2026-08-25T15:02:00.000Z"
+    }
+  }
+]

@@ -1,20 +1,9 @@
 import { Session } from "@/types";
+import { listSessions } from "@/lib/store/sessions";
 
+// Server components read the store directly — there is no external database
+// and no NEXT_PUBLIC_API_BASE_URL round trip to make. The /api/sessions route
+// still exists for client-side calls and for inspecting the store in the demo.
 export async function fetchSessions(): Promise<Session[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sessions`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch sessions: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  // Optional: basic sanity check
-  if (!Array.isArray(data)) {
-    throw new Error("Invalid response format");
-  }
-
-  return data;
+  return listSessions();
 }

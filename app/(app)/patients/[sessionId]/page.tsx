@@ -1,23 +1,25 @@
 import PatientPageContainer from "@/components/PatientPageContainer";
 import StatRow from "@/components/StatRow";
+import { getSession } from "@/lib/store/sessions";
+import { notFound } from "next/navigation";
 
-export default  async function PatientsPage({params}: { params: Promise<{ sessionId: string }> }) {
-    const { sessionId } = await params;
-  
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sessions/${sessionId}`,
-    { cache: "no-store" }
-  );
+export default async function PatientsPage({
+  params,
+}: {
+  params: Promise<{ sessionId: string }>;
+}) {
+  const { sessionId } = await params;
 
-  const result = await res.json();
+  const result = getSession(sessionId);
 
-//   console.log(data);
-  
+  if (!result) {
+    notFound();
+  }
 
   return (
     <>
-    <StatRow />
-    <PatientPageContainer result={result} />
+      <StatRow />
+      <PatientPageContainer result={result} />
     </>
   );
 }
