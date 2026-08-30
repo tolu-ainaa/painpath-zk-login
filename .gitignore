@@ -46,3 +46,9 @@ next-env.d.ts
 
 # Compact prover/verifier keys — 7.7MB of binary, regenerate with `npm run compact`
 /contract/src/managed/painpath/keys/
+
+# clinician agent
+/agent/node_modules
+/agent/dist
+/agent/logs
+/agent/.midnight-level-db

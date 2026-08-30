@@ -1,0 +1,37 @@
+{
+  "name": "@painpath/clinician-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The clinician's side of the ZK login. Holds the secret, generates proofs, submits to Midnight. Never runs on the portal server.",
+  "scripts": {
+    "local": "node --experimental-specifier-resolution=node --loader ts-node/esm src/run.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.16.0",
+    "@midnight-ntwrk/midnight-js-contracts": "4.1.1",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-network-id": "4.1.1",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "4.1.1",
+    "@midnight-ntwrk/midnight-js-protocol": "4.1.1",
+    "@midnight-ntwrk/midnight-js-types": "4.1.1",
+    "@midnight-ntwrk/midnight-js-utils": "4.1.1",
+    "@midnight-ntwrk/testkit-js": "4.1.1",
+    "@midnight-ntwrk/wallet-sdk": "1.2.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "*",
+    "@midnight-ntwrk/wallet-sdk-facade": "*",
+    "@midnight-ntwrk/wallet-sdk-shielded": "*",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "*",
+    "pino": "^10.3.1",
+    "pino-pretty": "^13.1.3",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
