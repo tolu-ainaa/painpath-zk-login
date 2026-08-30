@@ -51,4 +51,9 @@ next-env.d.ts
 /agent/node_modules
 /agent/dist
 /agent/logs
+/agent/midnight-level-db
 /agent/.midnight-level-db
+
+# agent local passphrase for the encrypted private state store
+/agent/.secrets
+/agent/logs

@@ -1,7 +1,17 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { EnvironmentConfiguration } from "@midnight-ntwrk/testkit-js";
 
-export const currentDir = path.resolve(new URL(import.meta.url).pathname, "..");
+/*
+ * fileURLToPath, not `new URL(...).pathname`.
+ *
+ * bboard-cli uses .pathname, which is percent-encoded — it returns
+ * "/Coding%20Projects/..." for any path containing a space. That silently
+ * produces a directory that does not exist, and the failure surfaces much
+ * later as "Failed to read verifier key". Their repo path has no spaces;
+ * this one does.
+ */
+export const currentDir = path.resolve(fileURLToPath(import.meta.url), "..");
 
 /*
  * The local stack from docker/midnight-local.yml.

@@ -3,8 +3,15 @@
   "configurations": [
     {
       "name": "physio-portal",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "wsl",
+      "runtimeArgs": [
+        "-d",
+        "Ubuntu",
+        "-e",
+        "bash",
+        "-lc",
+        "cd '/mnt/d/Coding Projects/Major league Hacking/Midnight/physio-portal' && export NVM_DIR=\"$HOME/.nvm\" && . \"$NVM_DIR/nvm.sh\" && npm run dev"
+      ],
       "port": 3000
     }
   ]

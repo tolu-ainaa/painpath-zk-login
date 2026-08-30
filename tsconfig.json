@@ -30,5 +30,13 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "docker",
+    // Workspace packages with their own tsconfig and their own compile target.
+    // The portal targets ES2017; the agent targets ES2022 and uses BigInt
+    // literals, so type-checking them together fails.
+    "agent",
+    "contract/src/test"
+  ]
 }

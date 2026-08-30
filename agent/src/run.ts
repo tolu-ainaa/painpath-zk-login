@@ -19,6 +19,8 @@ import { NodeZkConfigProvider } from "@midnight-ntwrk/midnight-js-node-zk-config
 import { toHex } from "@midnight-ntwrk/midnight-js-utils";
 import { firstValueFrom, map } from "rxjs";
 import { webcrypto } from "node:crypto";
+import { WebSocket } from "ws";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 
 import { MidnightWalletProvider } from "./midnight-wallet-provider";
 import { syncWallet } from "./wallet-utils";
@@ -46,6 +48,30 @@ const rule = (title: string) => {
 const randomBytes32 = (): Uint8Array =>
   webcrypto.getRandomValues(new Uint8Array(32));
 
+/*
+ * LevelPrivateStateProvider encrypts private state at rest and requires a
+ * passphrase meeting its own policy: 16+ characters and at least three of
+ * uppercase / lowercase / digits / symbols.
+ *
+ * Read it from the environment if set, otherwise mint a strong one and keep it
+ * in a gitignored file so the store stays readable between runs. Nothing here
+ * is a shared secret — it protects one developer's local LevelDB.
+ */
+function passphrase(): string {
+  const fromEnv = process.env.PAINPATH_AGENT_PASSPHRASE;
+  if (fromEnv) return fromEnv;
+
+  const file = ".secrets/agent-passphrase";
+  if (existsSync(file)) return readFileSync(file, "utf8").trim();
+
+  const raw = Buffer.from(webcrypto.getRandomValues(new Uint8Array(24))).toString("base64url");
+  const generated = `Aa1!${raw}`;
+  mkdirSync(".secrets", { recursive: true });
+  writeFileSync(file, generated, { mode: 0o600 });
+  line(`generated a local passphrase for the encrypted private state store -> ${file}`);
+  return generated;
+}
+
 async function main() {
   const logger = await createLogger("./logs/agent.log");
 
@@ -59,16 +85,27 @@ async function main() {
   await syncWallet(logger, walletProvider.wallet);
   line("wallet synced against the local dev chain");
 
+  // The proof provider needs the ZK config provider, so build that first.
+  const zkConfigProvider = new NodeZkConfigProvider<
+    "register" | "authenticate"
+  >(zkConfigPath);
+
   const providers = {
     privateStateProvider: levelPrivateStateProvider<typeof privateStateKey>({
       privateStateStoreName,
+      privateStoragePasswordProvider: () => passphrase(),
+      accountId: "painpath-local-clinician",
     }),
     publicDataProvider: indexerPublicDataProvider(
       localEnvironment.indexer,
       localEnvironment.indexerWS,
+      WebSocket as never,
     ),
-    zkConfigProvider: new NodeZkConfigProvider(zkConfigPath),
-    proofProvider: httpClientProofProvider(localEnvironment.proofServer),
+    zkConfigProvider,
+    proofProvider: httpClientProofProvider(
+      localEnvironment.proofServer,
+      zkConfigProvider,
+    ),
     walletProvider,
     midnightProvider: walletProvider,
   };
