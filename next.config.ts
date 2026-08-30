@@ -18,6 +18,18 @@ const nextConfig: NextConfig = {
       layers: true,
     };
 
+    /*
+     * The dev server runs inside WSL while the repo lives on /mnt/d. inotify
+     * does not cross that 9p mount, so file changes are invisible to the
+     * watcher and new routes 404 until a restart. Poll instead.
+     */
+    config.watchOptions = {
+      ...config.watchOptions,
+      poll: 1000,
+      aggregateTimeout: 300,
+      ignored: /node_modules/,
+    };
+
     if (!isServer) {
       // The Midnight packages reference Node built-ins on paths the browser
       // never takes. Stub them rather than polyfilling.
