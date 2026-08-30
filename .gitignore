@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# contract build output
+/contract/node_modules
+/contract/dist
+
+# Compact prover/verifier keys — 7.7MB of binary, regenerate with `npm run compact`
+/contract/src/managed/painpath/keys/

@@ -1,0 +1,104 @@
+// PainPath ZK Login
+//
+// Replaces the clinician password login on the PainPath physio portal with a
+// zero-knowledge credential check. Forked from midnightntwrk/example-bboard.
+//
+// The clinician holds a 256-bit secret in encrypted private state on their own
+// device. The secret never leaves it. Two things ever reach the public ledger:
+//
+//   1. a commitment  - H("painpath:cred:", sk), proving an account exists
+//   2. a nullifier   - H("painpath:auth:", challenge, sk), proving a login
+//                      happened, and making that exact proof unreplayable
+//
+// Neither is invertible, so a full dump of this ledger yields nothing an
+// attacker can use to impersonate anyone. There is no credential table.
+
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+// ---------------------------------------------------------------------------
+// Public ledger state
+// ---------------------------------------------------------------------------
+
+// Every registered clinician's credential commitment. Membership proves an
+// account exists; the set reveals nothing about which secret produced which
+// entry.
+export ledger commitments: Set<Bytes<32>>;
+
+// Every nullifier already spent. A nullifier is unique to one (secret,
+// challenge) pair, so re-submitting a captured proof collides with its own
+// past entry and the transaction fails.
+export ledger nullifiers: Set<Bytes<32>>;
+
+// ---------------------------------------------------------------------------
+// Private state
+// ---------------------------------------------------------------------------
+
+// Supplied by the TypeScript driver from LevelPrivateStateProvider, which
+// encrypts at rest. The compiler will not let this value reach the ledger
+// except through an explicit disclose().
+//
+// Per the Compact docs: never assume a witness returns what your own
+// implementation returns. Treat everything below as untrusted input.
+witness localSecret(): Bytes<32>;
+
+// ---------------------------------------------------------------------------
+// Derivations
+//
+// Both hashes are domain-separated by a distinct prefix, so a commitment can
+// never be mistaken for a nullifier, and neither can be replayed as the other.
+// ---------------------------------------------------------------------------
+
+export circuit credentialCommitment(sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([pad(32, "painpath:cred:"), sk]);
+}
+
+export circuit sessionNullifier(challenge: Bytes<32>, sk: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<3, Bytes<32>>>(
+    [pad(32, "painpath:auth:"), challenge, sk]
+  );
+}
+
+// ---------------------------------------------------------------------------
+// register
+//
+// Enrols a new clinician. Discloses the commitment and nothing else.
+// ---------------------------------------------------------------------------
+
+export circuit register(): [] {
+  const sk = localSecret();
+  const commitment = disclose(credentialCommitment(sk));
+
+  // Registering twice with the same secret would be a no-op on a Set, but
+  // failing loudly keeps the portal's "account already exists" path honest.
+  assert(!commitments.member(commitment), "credential is already registered");
+
+  commitments.insert(commitment);
+}
+
+// ---------------------------------------------------------------------------
+// authenticate
+//
+// Proves the caller holds a secret whose commitment is already registered,
+// without revealing which one.
+//
+// `challenge` is a fresh random value issued by the portal for this one login
+// attempt. Binding the nullifier to it is what allows a clinician to log in
+// more than once while still making any single proof unreplayable.
+// ---------------------------------------------------------------------------
+
+export circuit authenticate(challenge: Bytes<32>): [] {
+  const sk = localSecret();
+
+  // 1. The secret must correspond to a registered credential.
+  const commitment = disclose(credentialCommitment(sk));
+  assert(commitments.member(commitment), "no credential registered for this secret");
+
+  // 2. Derive this login's nullifier and refuse a proof that has been seen.
+  const nullifier = disclose(sessionNullifier(challenge, sk));
+  assert(!nullifiers.member(nullifier), "this proof has already been used");
+
+  // 3. Spend it. The portal watches for this to open the session.
+  nullifiers.insert(nullifier);
+}

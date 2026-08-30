@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../../../",
+  "sources": ["src/painpath.compact", "compiler/standard-library.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAeA;;;;;;;;;;;;;MAqCA,AAAA,oBAEC;;OAAA;MAED,AAAA,gBAIC;;OAAA;MAQD,AAAA,QASC;;;;;;;;;;;;;;;;;;;;;;OAAA;MAaD,AAAA,YAaC;;;;;cAb2B,WAAoB;;;;;;;;;;;;;;;;;;yCAApB,WAAoB;;;;;;;;;8CAApB,WAAoB;;;OAa/C;;;;;;;;;;GACA;EAzFD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAWA;;;;;;;;;;yEAA0C;IAK1C;;;;;;;;;;yEAAyC;;;;;;;GAyExC;ECxGD,AAAA,kBAAA;oEAAA;;;EAAA,AAAA,kBAAA;oEAAA;;;ED2CA,AAAA,cAAiC;;0DAAjC,WAAiC;;;;;;;;;;;;;;GAAA;EASjC,AAAA,uBAEC,CAFmC,IAAa;;mCACyB,IAAE;GAC3E;EAED,AAAA,mBAIC,CAJ+B,WAAoB,EAAE,IAAa;;mCAEnC,WAAS;mCAAE,IAAE;GAE5C;EAQD,AAAA,WASC;UARO,IAAkB;UAClB,YAA+C,gCAAJ,IAAE;qDAI3C;;;;;;;;;;;4KAAmB,YAAU;;;;0HAAlB;;IAEnB;;;;;;;;;;2HAAmB,YAAU;;;;;wEAAlB;;GACZ;EAaD,AAAA,eAaC,4BAb2B,WAAoB;UACxC,IAAkB;UAGlB,YAA+C,gCAAJ,IAAE;oDAC5C;;;;;;;;;;;2KAAmB,YAAU;;;;yHAAlB;;UAGZ,WAAqD,4BAAf,WAAS,EAAE,IAAE;qDACjD;;;;;;;;;;;4KAAkB,WAAS;;;;0HAAjB;;IAGlB;;;;;;;;;;2HAAkB,WAAS;;;;;wEAAjB;;GACX;;;;;;;;;;;;;;;;IA7ED;;;;;uCAAA;;;;;;;;;;;;;;;;4GAA0C;;;;;;uCAA1C;;;;;;;;;;;;4GAA0C;;;;;;;;;;;;;;uCAA1C;;;;;;;;;;;;;;;4GAA0C;;;;;;;;;KAAA;IAK1C;;;;;uCAAA;;;;;;;;;;;;;;;;4GAAyC;;;;;;uCAAzC;;;;;;;;;;;;4GAAyC;;;;;;;;;;;;;;uCAAzC;;;;;;;;;;;;;;;4GAAyC;;;;;;;;;KAAA;;;;;;;;EAqBzC,AAAA,oBAEC;;;;UAFmC,IAAa;;;;;;;;kDAAb,IAAa;GAEhD;EAED,AAAA,gBAIC;;;;UAJ+B,WAAoB;UAAE,IAAa;;;;;;;;;;;;;;;8CAAnC,WAAoB,EAAE,IAAa;GAIlE;;;;"
+}
