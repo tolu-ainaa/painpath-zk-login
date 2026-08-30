@@ -6,7 +6,8 @@
   "description": "The clinician's side of the ZK login. Holds the secret, generates proofs, submits to Midnight. Never runs on the portal server.",
   "scripts": {
     "local": "node --experimental-specifier-resolution=node --loader ts-node/esm src/run.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "login": "node --experimental-specifier-resolution=node --loader ts-node/esm src/login.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/compact-runtime": "0.16.0",
