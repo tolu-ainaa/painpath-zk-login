@@ -57,3 +57,6 @@ next-env.d.ts
 # agent local passphrase for the encrypted private state store
 /agent/.secrets
 /agent/logs
+
+# deployed contract address, environment-specific
+/.midnight

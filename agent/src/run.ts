@@ -124,6 +124,26 @@ async function main() {
   const address = deployed.deployTxData.public.contractAddress;
   line(`contract deployed at ${address}`);
 
+  // Publish the address so the portal can read the same ledger. The address is
+  // public data — it is on chain — but it is environment-specific, so it is
+  // written to a gitignored file rather than committed.
+  mkdirSync("../.midnight", { recursive: true });
+  writeFileSync(
+    "../.midnight/contract.json",
+    JSON.stringify(
+      {
+        contractAddress: address,
+        network: "undeployed",
+        indexer: localEnvironment.indexer,
+        indexerWS: localEnvironment.indexerWS,
+        deployedAt: new Date().toISOString(),
+      },
+      null,
+      2,
+    ),
+  );
+  line("address published to .midnight/contract.json for the portal");
+
   const readLedger = async () =>
     firstValueFrom(
       providers.publicDataProvider

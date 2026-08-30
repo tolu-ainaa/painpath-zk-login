@@ -39,8 +39,20 @@ type VerifierData = {
   generatedAt: string;
 };
 
+type LedgerData = {
+  deployed: boolean;
+  found?: boolean;
+  contractAddress?: string;
+  commitments?: string[];
+  nullifiers?: string[];
+  counts?: { registeredClinicians: number; loginsSpent: number };
+  note?: string;
+  error?: string;
+};
+
 export default function VerifierPage() {
   const [data, setData] = useState<VerifierData | null>(null);
+  const [ledger, setLedger] = useState<LedgerData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,6 +60,18 @@ export default function VerifierPage() {
       .then((r) => r.json())
       .then(setData)
       .catch((e) => setError(String(e)));
+  }, []);
+
+  // Poll the chain so a commitment appearing mid-demo shows up live.
+  useEffect(() => {
+    const read = () =>
+      fetch("/api/ledger", { cache: "no-store" })
+        .then((r) => r.json())
+        .then(setLedger)
+        .catch(() => {});
+    read();
+    const id = setInterval(read, 4000);
+    return () => clearInterval(id);
   }, []);
 
   return (
@@ -105,6 +129,67 @@ export default function VerifierPage() {
             <p className="text-[12px] text-[#888780] mb-6 leading-[1.5]">
               {data.credentialStorage.note}
             </p>
+
+            {/* The contrast: the server holds nothing, the chain holds hashes. */}
+            <Section title="For comparison — what the Midnight ledger holds">
+              {!ledger ? (
+                <Empty>Reading the chain…</Empty>
+              ) : !ledger.deployed ? (
+                <Empty>{ledger.note}</Empty>
+              ) : ledger.error || !ledger.found ? (
+                <div className="text-[12px] text-[#A32D2D] break-all">
+                  {ledger.error ?? ledger.note}
+                </div>
+              ) : (
+                <>
+                  <div className="flex gap-2 mb-3">
+                    <div className="rounded-lg px-3 py-2 bg-[#EEEDFE] flex-1">
+                      <div className="text-[20px] font-medium text-[#3C3489] leading-none">
+                        {ledger.counts?.registeredClinicians}
+                      </div>
+                      <div className="text-[11px] text-[#888780] mt-[4px]">
+                        Credential commitments
+                      </div>
+                    </div>
+                    <div className="rounded-lg px-3 py-2 bg-[#FAEEDA] flex-1">
+                      <div className="text-[20px] font-medium text-[#854F0B] leading-none">
+                        {ledger.counts?.loginsSpent}
+                      </div>
+                      <div className="text-[11px] text-[#888780] mt-[4px]">
+                        Nullifiers spent
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] text-[#888780] mb-1">
+                    contract {ledger.contractAddress?.slice(0, 24)}…
+                  </div>
+
+                  <div className="flex flex-col gap-1 mb-3">
+                    {ledger.commitments?.map((c) => (
+                      <div
+                        key={c}
+                        className="text-[11px] font-mono break-all px-2 py-1 rounded bg-[#EEEDFE] text-[#3C3489]"
+                      >
+                        {c}
+                      </div>
+                    ))}
+                    {ledger.nullifiers?.map((n) => (
+                      <div
+                        key={n}
+                        className="text-[11px] font-mono break-all px-2 py-1 rounded bg-[#FAEEDA] text-[#854F0B]"
+                      >
+                        {n}
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-[12px] text-[#888780] leading-[1.5]">
+                    {ledger.note}
+                  </p>
+                </>
+              )}
+            </Section>
 
             <Section title="Cookies presented by this browser">
               {data.cookies.length === 0 ? (
