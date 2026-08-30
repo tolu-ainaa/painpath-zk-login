@@ -213,3 +213,95 @@ midnight-js, webpack, webassembly
 ```
 https://github.com/tolu-ainaa/painpath-zk-login
 ```
+
+---
+
+## Tell us more about your experience working with Midnight
+
+### What worked well
+
+**Compact's disclosure model is the best part of the platform.** Having to write
+`disclose()` explicitly before witness data can reach the ledger turns "did I
+leak something?" from a code review question into a compiler error. The
+generated `contract-info.json` sealed it — being able to read that `register`
+takes *no public arguments at all* is a far stronger guarantee than reading my
+own circuit and hoping.
+
+**The docs are blunt in the right places.** "Do not assume in your contract that
+the code of any witness function is the code that you wrote in your own
+implementation" reframed how I wrote every assert. That one sentence is worth a
+page of prose.
+
+**`example-bboard` is a genuinely good starting point.** Forking `post`/
+`takeDown` into `register`/`authenticate` was a smaller edit than expected,
+because the shape — a domain-separated commitment, a witness secret, a counter
+guarding replay — already matches what a credential check needs.
+
+**The proof server is unfussy.** Started first try, fetched and *verified* its
+proving keys, and never fell over.
+
+### What was hard
+
+**The faucet.** This cost the most time for the least reason. Lace holds three
+addresses and the faucet accepts exactly one — the Midnight **unshielded**
+address (`mn_addr_preprod1…`). A Cardano address (`addr_test1…`) is silently
+rejected, and a shielded address (`mn_shield-addr_preprod1…`) fails with
+`InvalidAddressError`. Nothing in the faucet UI says which one it wants. There
+are multiple forum threads of people stuck on exactly this, plus a separate
+cluster reporting tokens that never arrive at all. A one-line hint on the form —
+"paste your unshielded address, it starts `mn_addr_`" — would eliminate most of
+those threads.
+
+**There are two testnets and it isn't obvious.** `preprod` and `preview` have
+separate faucets, and the wallet extension is called "Lace Midnight Preview",
+which reads like the network name but isn't. One forum reply noted the docs
+pointed at the wrong faucet link entirely.
+
+**Version drift across the docs.** `example-bboard`'s README asks for Lace
+1.36.0+, the store ships 2.39.0, and the Lace team's own note says everything
+below 2.36 must be deleted and recreated. The toolchain page shows proof server
+`8.1.0` while the repo pins `8.0.3`.
+
+**Windows is unsupported, and I found out late.** The one line stating this
+lives on the toolchain install page, not on the tutorial landing page. Everything
+went into WSL, which was the right answer — but a banner earlier in the funnel
+would have saved a couple of hours.
+
+**Duplicate module instances produce baffling errors.** `compact-js` tags
+compiled contracts with an unregistered `Symbol()`, so three copies in one tree
+meant a lookup silently returned `undefined` and surfaced as
+`Cannot read properties of undefined (reading 'ctor')`. Two copies of
+`onchain-runtime-v3` meant `StateValue` failed `instanceof` and surfaced as
+`expected instance of StateValue`. Neither message hints that the real problem
+is package identity. The examples avoid this by being npm workspaces with pinned
+`resolutions` — a structural detail that's invisible until you copy their code
+into a repo shaped differently.
+
+**A path with a space in it broke the ZK config provider.** `bboard-cli` uses
+`new URL(import.meta.url).pathname`, which is percent-encoded. Our repo lives
+under `Coding Projects`, so it looked in `/Coding%20Projects/…` and reported
+`Failed to read verifier key`. The keys were correct the whole time.
+`fileURLToPath` fixes it, and the examples should probably use it.
+
+**A half-finished install reports itself as complete.** On a minimal Ubuntu
+image the Compact installer fails with "Failed to spawn artifact extraction
+command" because `unzip` is missing — then leaves a version directory containing
+only an unextracted `artifact.zip`, after which `compact update 0.31.0` says
+`already installed` while `compactc` does not exist.
+
+### What would make it better
+
+1. **Tell the faucet user which address to paste.** One line of helper text.
+2. **Ship `fileURLToPath` in the examples**, so paths with spaces work.
+3. **Make the examples' workspace/pinning requirement explicit** — a note saying
+   "these packages must resolve to a single instance; use overrides" would have
+   saved hours.
+4. **Have `compact update` verify the binary exists** before reporting success.
+5. **Surface the standalone path much earlier.** `bboard-cli` has a `standalone`
+   script that spins up node + indexer + proof server via testcontainers with a
+   funded genesis wallet — no faucet, no tDUST. It is not mentioned in the
+   tutorial, and it is by far the fastest way to a working round trip. We only
+   found it by reading `package.json`. Leading with it would remove the faucet
+   from the critical path for every hackathon participant.
+6. **Put the Windows/WSL note on the tutorial landing page**, not only the
+   install page.
